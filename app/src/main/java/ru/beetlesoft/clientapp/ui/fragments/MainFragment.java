@@ -3,6 +3,7 @@ package ru.beetlesoft.clientapp.ui.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -40,8 +41,19 @@ public class MainFragment extends Fragment {
     @BindView(R.id.rv_action)
     RecyclerView rvAction;
 
+    public OnChangeFragmentListener changeFragmentListener;
     private Activity context;
     private String currentPhotoPath;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            changeFragmentListener = (OnChangeFragmentListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement OnChangeFragmentListener");
+        }
+    }
 
     @Nullable
     @Override
@@ -84,6 +96,7 @@ public class MainFragment extends Fragment {
         switch (position) {
             case 0:
                 //sound
+                changeFragmentListener.changeFragment(0);
                 break;
             case 1:
                 //foto
@@ -150,12 +163,16 @@ public class MainFragment extends Fragment {
     private void startCamera(){
         try {
             File image = FileUtils.createImageFile();
-            currentPhotoPath = "file:" + image.getAbsolutePath();;
+            currentPhotoPath = "file:" + image.getAbsolutePath();
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, FileUtils.generateFileUri(context, image));
             startActivityForResult(intent, REQUEST_CODE_PHOTO);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public interface OnChangeFragmentListener {
+        void changeFragment(int fragmentId);
     }
 }

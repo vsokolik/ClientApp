@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.AuthActivity">
-
-    <fragment
-        android:id="@+id/fragment"
-        android:name="ru.beetlesoft.clientapp.ui.fragments.MainFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_main"/>
-</LinearLayout>
+    android:id="@+id/fr_container">
+    <!--<fragment-->
+        <!--android:id="@+id/fragment"-->
+        <!--android:name="ru.beetlesoft.clientapp.ui.fragments.MainFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:layout="@layout/fragment_main"/>-->
+</FrameLayout>
