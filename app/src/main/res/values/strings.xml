@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">ClientApp</string>
+
+    <string name="title_sound">Запись звука с микрофона</string>
+    <string name="title_photo">Запись фото</string>
+    <string name="title_geofence">Geofence</string>
+
+
     <string name="action_auth">Авторизоваться</string>
+    <string name="action_record">Запись</string>
+    <string name="description_record">Нажмите и удерживайте кнопку для записи звука</string>
 </resources>
