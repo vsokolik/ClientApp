@@ -25,8 +25,7 @@ public class FileUtils {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "PHOTO_" + timeStamp + "_";
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "Camera");
+        File storageDir = getParentDir();
         return File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -37,9 +36,7 @@ public class FileUtils {
     public static File createAudioFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String audioFileName = "AUDIO_" + timeStamp + "_";
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "Camera");
-//        File storageDir = createParentDir();
+        File storageDir = getParentDir();
         return File.createTempFile(
                 audioFileName,  /* prefix */
                 ".m4a",         /* suffix */
@@ -47,14 +44,11 @@ public class FileUtils {
         );
     }
 
-//    private static File createParentDir() throws IOException {
-//        File file = new File(Environment.getExternalStorageDirectory(), "ClientApp");
-//        if (!file.getParentFile().exists()) {
-//            file.getParentFile().mkdirs();
-//        }
-//        if (!file.exists()) {
-//            file.createNewFile();
-//        }
-//        return file;
-//    }
+    private static File getParentDir(){
+        File parentDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "ClientApp");
+        if(!parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+        return parentDir;
+    }
 }
