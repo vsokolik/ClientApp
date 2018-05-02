@@ -75,7 +75,7 @@ public class MainFragment extends Fragment {
 
     private List<HashMap<Integer, String>> getActions() {
         List<HashMap<Integer, String>> mapAction = new ArrayList<>();
-        mapAction.add(createMap(R.drawable.ic_add_sound, getString(R.string.title_sound)));
+        mapAction.add(createMap(R.drawable.ic_add_audio, getString(R.string.title_audio)));
         mapAction.add(createMap(R.drawable.ic_add_photo, getString(R.string.title_photo)));
         mapAction.add(createMap(R.drawable.ic_location, getString(R.string.title_geofence)));
         return mapAction;
@@ -89,9 +89,9 @@ public class MainFragment extends Fragment {
 
     private void action(int position) {
         switch (position) {
-            case ActionPosition.SOUND:
-                //sound
-                changeFragmentListener.changeFragment(ActionPosition.SOUND);
+            case ActionPosition.AUDIO:
+                //audio
+                changeFragmentListener.changeFragment(ActionPosition.AUDIO);
                 break;
             case ActionPosition.PHOTO:
                 //foto

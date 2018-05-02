@@ -13,9 +13,9 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import ru.beetlesoft.clientapp.R;
 import ru.beetlesoft.clientapp.constant.ActionPosition;
+import ru.beetlesoft.clientapp.ui.fragments.AudioFragment;
 import ru.beetlesoft.clientapp.ui.fragments.GeofenceFragment;
 import ru.beetlesoft.clientapp.ui.fragments.MainFragment;
-import ru.beetlesoft.clientapp.ui.fragments.SoundFragment;
 
 public class MainActivity extends BaseActivity implements MainFragment.OnChangeFragmentListener {
 
@@ -56,10 +56,10 @@ public class MainActivity extends BaseActivity implements MainFragment.OnChangeF
                 tr.commit();
                 break;
 
-            case ActionPosition.SOUND:
-                SoundFragment soundFragment = new SoundFragment();
-                tr.addToBackStack("SoundRecord");
-                tr.replace(R.id.fr_container, soundFragment);
+            case ActionPosition.AUDIO:
+                AudioFragment audioFragment = new AudioFragment();
+                tr.addToBackStack("AudioRecord");
+                tr.replace(R.id.fr_container, audioFragment);
                 tr.commit();
                 break;
 

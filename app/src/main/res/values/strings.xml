@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ClientApp</string>
 
-    <string name="title_sound">Запись звука с микрофона</string>
+    <string name="title_audio">Запись звука с микрофона</string>
     <string name="title_photo">Запись фото</string>
     <string name="title_geofence">Geofence</string>
 
