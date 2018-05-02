@@ -18,7 +18,7 @@ public class ClientApp extends Application {
 
         appComponent = DaggerAppComponent.builder()
                 .contextModule(new ContextModule(this))
-                .retrofitModule(new RetrofitModule())
+                .retrofitModule(new RetrofitModule(this))
                 .build();
 
         appComponent.inject(this);

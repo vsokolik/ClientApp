@@ -63,7 +63,7 @@ public class AuthActivity extends BaseActivity {
                 if (resultCode == RESULT_OK) {
                     startActivityAndFinish(MainActivity.class);
                 } else {
-                    tvDescription.setText("Что-то пошло не так");
+                    tvDescription.setText(getString(R.string.unknow_error));
                 }
                 break;
             default:

@@ -61,7 +61,7 @@ public class FileUtils {
         );
     }
 
-    public static File createZipFile() throws IOException {
+    private static File createZipFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String audioFileName = "ARCHIVE_" + timeStamp + "_";
         File storageDir = getParentDir();
@@ -72,29 +72,25 @@ public class FileUtils {
         );
     }
 
-    public static void zipAudio(File audioFile) {
-        try {
-            BufferedInputStream origin;
-            FileOutputStream dest = new FileOutputStream(createZipFile().getAbsolutePath());
-            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
+    public static File zipAudio(File audioFile) throws IOException {
+        BufferedInputStream origin;
+        File zipFile = createZipFile();
+        FileOutputStream dest = new FileOutputStream(zipFile.getAbsolutePath());
+        ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 
-            byte data[] = new byte[BUFFER_SIZE];
+        byte data[] = new byte[BUFFER_SIZE];
 
-
-            FileInputStream fi = new FileInputStream(audioFile.getAbsolutePath());
-            origin = new BufferedInputStream(fi, BUFFER_SIZE);
-            ZipEntry entry = new ZipEntry(audioFile.getAbsolutePath().substring(audioFile.getAbsolutePath().lastIndexOf("/") + 1));
-            out.putNextEntry(entry);
-            int count;
-            while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1) {
-                out.write(data, 0, count);
-            }
-            origin.close();
-
-
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        FileInputStream fi = new FileInputStream(audioFile.getAbsolutePath());
+        origin = new BufferedInputStream(fi, BUFFER_SIZE);
+        ZipEntry entry = new ZipEntry(audioFile.getAbsolutePath().substring(audioFile.getAbsolutePath().lastIndexOf("/") + 1));
+        out.putNextEntry(entry);
+        int count;
+        while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1) {
+            out.write(data, 0, count);
         }
+        origin.close();
+        out.close();
+
+        return zipFile;
     }
 }

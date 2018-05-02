@@ -1,13 +1,17 @@
 package ru.beetlesoft.clientapp.di.modules;
 
+import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -15,12 +19,18 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+import ru.beetlesoft.clientapp.constant.SharedPrefKeys;
 import ru.beetlesoft.clientapp.constant.VkConstants;
+import ru.beetlesoft.clientapp.utils.SharedPrefUtils;
 
-@Module
+@Module(includes = ContextModule.class)
 public class RetrofitModule {
 
-    public RetrofitModule() {}
+    private Context context;
+
+    public RetrofitModule(Context context) {
+        this.context = context;
+    }
 
 	@Provides
 	@Singleton
@@ -30,7 +40,17 @@ public class RetrofitModule {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
-                // try the request
+                HttpUrl.Builder builder = request
+                        .url()
+                        .newBuilder()
+                        .addQueryParameter("v", VkConstants.VERSION_API);
+                String token = SharedPrefUtils.getString(context, SharedPrefKeys.TOKEN);
+                if(!TextUtils.isEmpty(token)){
+                    builder.addQueryParameter("access_token", token);
+                }
+                HttpUrl url = builder.build();
+                request = request.newBuilder().url(url).build();
+
                 Response response = chain.proceed(request);
 
                 int tryCount = 0;
