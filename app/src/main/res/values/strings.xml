@@ -9,6 +9,7 @@
     <string name="action_auth">Авторизоваться</string>
     <string name="action_record">Запись</string>
     <string name="description_record">Нажмите и удерживайте кнопку для записи звука</string>
+    <string name="record_audio_success">Звук успешно записан</string>
 
     <string name="error_permission">Пожалуйста, разрешите запись информации на устройство</string>
     <string name="latitude">latitude</string>

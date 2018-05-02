@@ -88,6 +88,6 @@ public class AudioFragment extends Fragment{
             e.printStackTrace();
         }
         mediaRecorder = null;
-        Toast.makeText(context, "Recording saved successfully.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, getString(R.string.record_audio_success), Toast.LENGTH_SHORT).show();
     }
 }
