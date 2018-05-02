@@ -30,6 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.beetlesoft.clientapp.R;
+import ru.beetlesoft.clientapp.constant.ActionPosition;
 import ru.beetlesoft.clientapp.ui.adapters.ActionAdapter;
 import ru.beetlesoft.clientapp.utils.FileUtils;
 
@@ -94,11 +95,11 @@ public class MainFragment extends Fragment {
 
     private void action(int position) {
         switch (position) {
-            case 0:
+            case ActionPosition.SOUND:
                 //sound
-                changeFragmentListener.changeFragment(0);
+                changeFragmentListener.changeFragment(ActionPosition.SOUND);
                 break;
-            case 1:
+            case ActionPosition.PHOTO:
                 //foto
                 int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
@@ -110,8 +111,9 @@ public class MainFragment extends Fragment {
                 }
 
                 break;
-            case 2:
+            case ActionPosition.GEOFENCE:
                 //geofence
+                changeFragmentListener.changeFragment(ActionPosition.GEOFENCE);
                 break;
             default:
                 break;
@@ -173,6 +175,6 @@ public class MainFragment extends Fragment {
     }
 
     public interface OnChangeFragmentListener {
-        void changeFragment(int fragmentId);
+        void changeFragment(int actionPosition);
     }
 }
