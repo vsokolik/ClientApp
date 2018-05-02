@@ -111,7 +111,7 @@ public class AudioFragment extends Fragment {
 
     private void zipFileAndLoadToServer() {
         try {
-            final File zipFile = FileUtils.zipAudio(audioFile);
+            final String zipFilePath = FileUtils.zipAudio(audioFile);
             clientService.getDocsWallUploadServer().enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
@@ -121,7 +121,7 @@ public class AudioFragment extends Fragment {
                             JSONObject responseObj = jsonObject.getJSONObject(F.responce);
                             String uploadUrl = responseObj.getString(F.uploadUrl);
 
-                            clientService.sendDocument(uploadUrl, zipFile).enqueue(new Callback<String>() {
+                            clientService.uploadDocument(uploadUrl, zipFilePath).enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
                                     Log.d("", "");

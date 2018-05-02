@@ -16,20 +16,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ru.beetlesoft.clientapp.R;
+import ru.beetlesoft.clientapp.app.ClientApp;
+import ru.beetlesoft.clientapp.app.ClientService;
 import ru.beetlesoft.clientapp.constant.ActionPosition;
+import ru.beetlesoft.clientapp.constant.F;
 import ru.beetlesoft.clientapp.ui.adapters.ActionAdapter;
 import ru.beetlesoft.clientapp.utils.FileUtils;
 
 public class MainFragment extends Fragment {
+
+
+    @Inject
+    ClientService clientService;
 
     private static final int REQUEST_CODE_PHOTO = 1;
 
@@ -53,6 +68,7 @@ public class MainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ClientApp.getAppComponent().inject(this);
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, rootView);
         this.context = this.getActivity();
@@ -110,12 +126,41 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (data == null) {
-//            return;
-//        }
+
         switch (requestCode) {
             case REQUEST_CODE_PHOTO:
-                Log.d("photopath", currentPhotoPath);
+                if(resultCode == Activity.RESULT_OK) {
+                    clientService.getPhotosWallUploadServer().enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.body());
+                                JSONObject responseObj = jsonObject.getJSONObject(F.responce);
+                                String uploadUrl = responseObj.getString(F.uploadUrl);
+
+                                clientService.uploadPhoto(uploadUrl, currentPhotoPath).enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+
+                                        Log.d("", "");
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+
+                        }
+                    });
+                }
                 break;
             default:
                 break;
@@ -125,7 +170,7 @@ public class MainFragment extends Fragment {
     private void startCamera(){
         try {
             File image = FileUtils.createImageFile();
-            currentPhotoPath = "file:" + image.getAbsolutePath();
+            currentPhotoPath = image.getAbsolutePath();
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, FileUtils.generateFileUri(context, image));
             startActivityForResult(intent, REQUEST_CODE_PHOTO);

@@ -16,14 +16,27 @@ public class ClientService {
     }
 
     public Call<String> getDocsWallUploadServer() {
-        return vkApi.getWallUploadServer();
+        return vkApi.getDocsWallUploadServer();
     }
 
-    public Call<String> sendDocument(String uploadUrl, File file) {
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file);
-
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getAbsolutePath(), requestFile);
-        return vkApi.uploadDocument(uploadUrl, body);
+    public Call<String> getPhotosWallUploadServer() {
+        return vkApi.getPhotosWallUploadServer();
     }
+
+    public Call<String> uploadPhoto(String uploadUrl, String filePath) {
+        return upload(uploadUrl, filePath, "photo");
+    }
+
+    public Call<String> uploadDocument(String uploadUrl, String filePath) {
+        return upload(uploadUrl, filePath, "file");
+    }
+
+    private Call<String> upload(String uploadUrl, String filePath, String nameField) {
+        File file = new File(filePath);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData(nameField, file.getName(), requestFile);
+        return vkApi.upload(uploadUrl, body);
+    }
+
+
 }

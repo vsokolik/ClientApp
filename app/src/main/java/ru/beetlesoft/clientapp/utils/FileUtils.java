@@ -72,7 +72,7 @@ public class FileUtils {
         );
     }
 
-    public static File zipAudio(File audioFile) throws IOException {
+    public static String zipAudio(File audioFile) throws IOException {
         BufferedInputStream origin;
         File zipFile = createZipFile();
         FileOutputStream dest = new FileOutputStream(zipFile.getAbsolutePath());
@@ -91,6 +91,6 @@ public class FileUtils {
         origin.close();
         out.close();
 
-        return zipFile;
+        return zipFile.getAbsolutePath();
     }
 }
