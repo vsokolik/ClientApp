@@ -1,25 +1,20 @@
 package ru.beetlesoft.clientapp.ui.fragments;
 
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +32,6 @@ import ru.beetlesoft.clientapp.utils.FileUtils;
 public class MainFragment extends Fragment {
 
     private static final int REQUEST_CODE_PHOTO = 1;
-    private static final int WRITE_STORAGE_PERMISSION = 90;
 
     @BindView(R.id.rv_action)
     RecyclerView rvAction;
@@ -101,15 +95,7 @@ public class MainFragment extends Fragment {
                 break;
             case ActionPosition.PHOTO:
                 //foto
-                int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                    startCamera();
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, WRITE_STORAGE_PERMISSION);
-                    }
-                }
-
+                startCamera();
                 break;
             case ActionPosition.GEOFENCE:
                 //geofence
@@ -133,32 +119,6 @@ public class MainFragment extends Fragment {
                 break;
             default:
                 break;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case WRITE_STORAGE_PERMISSION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    startCamera();
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(context, getString(R.string.error_permission_photo), Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
         }
     }
 

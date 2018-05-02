@@ -10,7 +10,7 @@
     <string name="action_record">Запись</string>
     <string name="description_record">Нажмите и удерживайте кнопку для записи звука</string>
 
-    <string name="error_permission_photo">Пожалуйста, разрешите запись информации на устройство</string>
+    <string name="error_permission">Пожалуйста, разрешите запись информации на устройство</string>
     <string name="latitude">latitude</string>
     <string name="longitude">longitude</string>
     <string name="radius">radius</string>
