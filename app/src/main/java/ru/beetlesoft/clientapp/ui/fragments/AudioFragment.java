@@ -29,6 +29,7 @@ public class AudioFragment extends Fragment{
 
     private Context context;
     private MediaRecorder mediaRecorder;
+    private File audioFile;
 
     @Nullable
     @Override
@@ -65,8 +66,8 @@ public class AudioFragment extends Fragment{
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
         try {
-            File file = FileUtils.createAudioFile();
-            mediaRecorder.setOutputFile(file.getAbsolutePath());
+            audioFile = FileUtils.createAudioFile();
+            mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
             mediaRecorder.setAudioEncoder(
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
                             ? MediaRecorder.AudioEncoder.HE_AAC
@@ -88,6 +89,7 @@ public class AudioFragment extends Fragment{
             e.printStackTrace();
         }
         mediaRecorder = null;
+        FileUtils.zipAudio(audioFile);
         Toast.makeText(context, getString(R.string.record_audio_success), Toast.LENGTH_SHORT).show();
     }
 }
