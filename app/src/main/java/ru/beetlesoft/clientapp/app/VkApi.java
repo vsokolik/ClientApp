@@ -17,7 +17,9 @@ public interface VkApi {
 
     //сохранить документ
     @GET("docs.save")
-    Call<String> saveDoc(@Query("file") String file, @Query("title") String title);
+    Call<String> saveDoc(@Query("file") String file,
+                         @Query("title") String title
+    );
 
     //получть ссылку для загрузки фото
     @GET("photos.getWallUploadServer")
@@ -28,5 +30,20 @@ public interface VkApi {
     @Multipart
     @POST()
     Call<String> upload(@Url String uploadUrl,
-                        @Part MultipartBody.Part photo);
+                        @Part MultipartBody.Part photo
+    );
+
+    //сохранить фото
+    @GET("photos.saveWallPhoto")
+    Call<String> savePhoto(@Query("server") int server,
+                           @Query("hash") String hash,
+                           @Query("photo") String photo
+    );
+
+    //опубликовать фото
+    @GET("wall.post")
+    Call<String> wallPost(@Query("attachments") String attachments,
+                          @Query("lat") double latitude,
+                          @Query("long") double longitude
+    );
 }

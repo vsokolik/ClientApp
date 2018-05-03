@@ -38,5 +38,13 @@ public class ClientService {
         return vkApi.upload(uploadUrl, body);
     }
 
+    public Call<String> savePhoto(int server, String hash, String photo) {
+        return vkApi.savePhoto(server, hash, photo);
+    }
+
+    public Call<String> wallPost(String attachments, double latitude, double longitude) {
+        return vkApi.wallPost(attachments, latitude, longitude);
+    }
+
 
 }

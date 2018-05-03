@@ -29,13 +29,15 @@ public class MainActivity extends BaseActivity implements MainFragment.OnChangeF
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{
                                 Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.RECORD_AUDIO,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.ACCESS_FINE_LOCATION},
                         PERMISSION_REQUEST_CODE);
             }
 
@@ -81,7 +83,7 @@ public class MainActivity extends BaseActivity implements MainFragment.OnChangeF
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
 
         if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length == 3 &&
+            if (grantResults.length >= 3 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED
                     && grantResults[2] == PackageManager.PERMISSION_GRANTED) {

@@ -1,20 +1,27 @@
 package ru.beetlesoft.clientapp.ui.fragments;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +46,7 @@ import ru.beetlesoft.clientapp.constant.ActionPosition;
 import ru.beetlesoft.clientapp.constant.F;
 import ru.beetlesoft.clientapp.ui.adapters.ActionAdapter;
 import ru.beetlesoft.clientapp.utils.FileUtils;
+import ru.beetlesoft.clientapp.utils.LocationUtils;
 
 public class MainFragment extends Fragment {
 
@@ -124,12 +132,12 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
             case REQUEST_CODE_PHOTO:
-                if(resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK) {
                     clientService.getPhotosWallUploadServer().enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
@@ -141,23 +149,78 @@ public class MainFragment extends Fragment {
                                 clientService.uploadPhoto(uploadUrl, currentPhotoPath).enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
+                                        if (response.isSuccessful() && response.body() != null && !response.body().contains("error")) {
+                                            try {
+                                                JSONObject jsonObject = new JSONObject(response.body());
+                                                int server = jsonObject.getInt(F.server);
+                                                String hash = jsonObject.getString(F.hash);
+                                                String photo = jsonObject.getString(F.photo);
 
-                                        Log.d("", "");
+                                                clientService.savePhoto(server, hash, photo).enqueue(new Callback<String>() {
+                                                    @Override
+                                                    public void onResponse(Call<String> call, Response<String> response) {
+                                                        if(response.isSuccessful() && response.body() != null && !response.body().contains("error")){
+                                                            try {
+                                                                JSONObject jsonObject = new JSONObject(response.body());
+                                                                JSONObject responseObj = jsonObject.getJSONArray(F.responce).getJSONObject(0);
+                                                                int ownerId = responseObj.getInt(F.ownerId);
+                                                                int id = responseObj.getInt(F.id);
+
+                                                                String photoId = "photo" + ownerId + "_" + id;
+                                                                clientService.wallPost(photoId, LocationUtils.getLatitude(context), LocationUtils.getLongitude(context)).enqueue(new Callback<String>() {
+                                                                    @Override
+                                                                    public void onResponse(Call<String> call, Response<String> response) {
+                                                                        Log.d("", "");
+                                                                        if(response.isSuccessful() && response.body() != null && !response.body().contains("error")){
+                                                                            showToast(getString(R.string.post_success));
+                                                                        } else {
+                                                                            showToast("");
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onFailure(Call<String> call, Throwable t) {
+                                                                        showToast("");
+                                                                    }
+                                                                });
+
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                                showToast("");
+                                                            }
+                                                        } else {
+                                                            showToast("");
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<String> call, Throwable t) {
+                                                        showToast("");
+                                                    }
+                                                });
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                showToast("");
+                                            }
+                                        } else {
+                                            showToast("");
+                                        }
                                     }
 
                                     @Override
                                     public void onFailure(Call<String> call, Throwable t) {
-
+                                        showToast("");
                                     }
                                 });
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                showToast("");
                             }
                         }
 
                         @Override
                         public void onFailure(Call<String> call, Throwable t) {
-
+                            showToast("");
                         }
                     });
                 }
@@ -167,7 +230,7 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void startCamera(){
+    private void startCamera() {
         try {
             File image = FileUtils.createImageFile();
             currentPhotoPath = image.getAbsolutePath();
@@ -182,4 +245,12 @@ public class MainFragment extends Fragment {
     public interface OnChangeFragmentListener {
         void changeFragment(int actionPosition);
     }
+
+    private void showToast(String message) {
+        if(TextUtils.isEmpty(message)){
+            message = getString(R.string.unknow_error);
+        }
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
 }
