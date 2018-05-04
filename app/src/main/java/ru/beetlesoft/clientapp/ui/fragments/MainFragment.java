@@ -48,7 +48,7 @@ import ru.beetlesoft.clientapp.ui.adapters.ActionAdapter;
 import ru.beetlesoft.clientapp.utils.FileUtils;
 import ru.beetlesoft.clientapp.utils.LocationUtils;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends BaseFragment {
 
 
     @Inject
@@ -246,11 +246,6 @@ public class MainFragment extends Fragment {
         void changeFragment(int actionPosition);
     }
 
-    private void showToast(String message) {
-        if(TextUtils.isEmpty(message)){
-            message = getString(R.string.unknow_error);
-        }
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    }
+
 
 }

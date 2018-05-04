@@ -6,14 +6,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +32,7 @@ import ru.beetlesoft.clientapp.app.ClientService;
 import ru.beetlesoft.clientapp.constant.F;
 import ru.beetlesoft.clientapp.utils.FileUtils;
 
-public class AudioFragment extends Fragment {
+public class AudioFragment extends BaseFragment {
 
 
     @Inject
@@ -146,7 +144,7 @@ public class AudioFragment extends Fragment {
             });
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(context, getString(R.string.unknow_error), Toast.LENGTH_SHORT).show();
+            showToast("");
         }
     }
 }

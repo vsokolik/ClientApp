@@ -83,10 +83,11 @@ public class MainActivity extends BaseActivity implements MainFragment.OnChangeF
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
 
         if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length >= 3 &&
+            if (grantResults.length == 4 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                    && grantResults[2] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[3] == PackageManager.PERMISSION_GRANTED) {
                 changeFragment(ActionPosition.MAIN);
             } else {
                 Toast.makeText(this, getString(R.string.error_permission), Toast.LENGTH_SHORT).show();

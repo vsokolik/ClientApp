@@ -21,4 +21,7 @@
     <string name="unknow_error">Что-то пошло не так</string>
 
     <string name="post_success">Запись успешно опубликована</string>
+
+    <string name="error_empty_geo_data">Пожалуйста, заполните все поля</string>
+
 </resources>
