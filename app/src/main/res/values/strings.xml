@@ -23,5 +23,7 @@
     <string name="post_success">Запись успешно опубликована</string>
 
     <string name="error_empty_geo_data">Пожалуйста, заполните все поля</string>
+    <!--<string name="enter_in">Вход в %1$f, %2$f, %3$d</string>-->
+    <!--<string name="exit_from">Выход из %1$f, %2$f, %3$d</string>-->
 
 </resources>

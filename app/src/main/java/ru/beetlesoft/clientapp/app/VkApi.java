@@ -46,4 +46,8 @@ public interface VkApi {
                           @Query("lat") double latitude,
                           @Query("long") double longitude
     );
+
+    //опубликовать сообщение
+    @GET("wall.post")
+    Call<String> wallPost(@Query("message") String message);
 }

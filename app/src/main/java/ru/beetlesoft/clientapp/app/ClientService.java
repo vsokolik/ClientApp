@@ -42,9 +42,15 @@ public class ClientService {
         return vkApi.savePhoto(server, hash, photo);
     }
 
+    public Call<String> saveDoc(String file, String title) {
+        return vkApi.saveDoc(file, title);
+    }
+
     public Call<String> wallPost(String attachments, double latitude, double longitude) {
         return vkApi.wallPost(attachments, latitude, longitude);
     }
 
-
+    public Call<String> wallPost(String message) {
+        return vkApi.wallPost(message);
+    }
 }

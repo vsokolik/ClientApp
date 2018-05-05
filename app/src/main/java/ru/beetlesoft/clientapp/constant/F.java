@@ -6,6 +6,7 @@ public interface F {
     String uploadUrl = "upload_url";
     String photo = "photo";
     String server = "server";
+    String file = "file";
     String hash = "hash";
     String ownerId = "owner_id";
     String id = "id";

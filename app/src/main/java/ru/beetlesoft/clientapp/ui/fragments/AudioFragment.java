@@ -31,6 +31,7 @@ import ru.beetlesoft.clientapp.app.ClientApp;
 import ru.beetlesoft.clientapp.app.ClientService;
 import ru.beetlesoft.clientapp.constant.F;
 import ru.beetlesoft.clientapp.utils.FileUtils;
+import ru.beetlesoft.clientapp.utils.LocationUtils;
 
 public class AudioFragment extends BaseFragment {
 
@@ -122,12 +123,66 @@ public class AudioFragment extends BaseFragment {
                             clientService.uploadDocument(uploadUrl, zipFilePath).enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
-                                    Log.d("", "");
+                                    if (response.isSuccessful() && response.body() != null && !response.body().contains("error")) {
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(response.body());
+                                            String file = jsonObject.getString(F.file);
+
+                                            clientService.saveDoc(file, "audio_archive").enqueue(new Callback<String>() {
+                                                @Override
+                                                public void onResponse(Call<String> call, Response<String> response) {
+                                                    if (response.isSuccessful() && response.body() != null && !response.body().contains("error")) {
+                                                        try {
+                                                            JSONObject jsonObject = new JSONObject(response.body());
+                                                            JSONObject responseObj = jsonObject.getJSONArray(F.responce).getJSONObject(0);
+                                                            int ownerId = responseObj.getInt(F.ownerId);
+                                                            int id = responseObj.getInt(F.id);
+
+                                                            String docId = "doc" + ownerId + "_" + id;
+                                                            clientService.wallPost(docId, LocationUtils.getLatitude(context), LocationUtils.getLongitude(context)).enqueue(new Callback<String>() {
+                                                                @Override
+                                                                public void onResponse(Call<String> call, Response<String> response) {
+                                                                    Log.d("", "");
+                                                                    if(response.isSuccessful() && response.body() != null && !response.body().contains("error")){
+                                                                        showToast(getString(R.string.post_success));
+                                                                    } else {
+                                                                        showToast("");
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onFailure(Call<String> call, Throwable t) {
+                                                                    showToast("");
+                                                                }
+                                                            });
+
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                            showToast("");
+                                                        }
+                                                    } else {
+                                                        showToast("");
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<String> call, Throwable t) {
+                                                    showToast("");
+                                                }
+                                            });
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            showToast("");
+                                        }
+                                    } else {
+                                        showToast("");
+                                    }
                                 }
 
                                 @Override
                                 public void onFailure(Call<String> call, Throwable t) {
-
+                                    showToast("");
                                 }
                             });
                             Log.d("", uploadUrl);

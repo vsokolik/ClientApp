@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,7 +19,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.internal.Constants;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
@@ -68,13 +66,14 @@ public class GeofenceFragment extends BaseFragment {
         btnSubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                etLatitude.setText("57.999641");
+//                etLongitude.setText("56.2443271");
+//                etRadius.setText("50");
+
                 String latitude = etLatitude.getText().toString();
                 String longitude = etLongitude.getText().toString();
                 String radius = etRadius.getText().toString();
 
-//                String latitude = "50";
-//                String longitude = "47";
-//                String radius = "100";
                 if (!TextUtils.isEmpty(latitude) && !TextUtils.isEmpty(longitude) && !TextUtils.isEmpty(radius)) {
                     addGeo(Double.parseDouble(latitude), Double.parseDouble(longitude), Float.parseFloat(radius), Geofence.GEOFENCE_TRANSITION_ENTER);
                 } else {
@@ -107,26 +106,24 @@ public class GeofenceFragment extends BaseFragment {
                     .addOnSuccessListener(context, new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d("GEO", "add success");
+                            showToast("geofence add success");
                         }
                     })
                     .addOnFailureListener(context, new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.d("GEO", "add fail");
-                            if(((ApiException) e).getStatusCode() == GEOFENCE_NOT_AVAILABLE){
+                            if (((ApiException) e).getStatusCode() == GEOFENCE_NOT_AVAILABLE) {
                                 showToast("geofence not available");
                             } else {
                                 showToast("");
                             }
                             e.printStackTrace();
                         }
-                    })
-            ;
+                    });
 
         }
 
-        geoId ++;
+        geoId++;
     }
 
     private GeofencingRequest getGeofencingRequest() {
@@ -137,13 +134,10 @@ public class GeofenceFragment extends BaseFragment {
     }
 
     private PendingIntent getGeofencePendingIntent() {
-        // Reuse the PendingIntent if we already have it.
         if (geofencePendingIntent != null) {
             return geofencePendingIntent;
         }
         Intent intent = new Intent(context, GeofenceTransitionsIntentService.class);
-        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-        // calling addGeofences() and removeGeofences().
         geofencePendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.
                 FLAG_UPDATE_CURRENT);
         return geofencePendingIntent;
@@ -164,8 +158,7 @@ public class GeofenceFragment extends BaseFragment {
                             Log.d("GEO", "remove fail");
                             e.printStackTrace();
                         }
-                    })
-            ;
+                    });
 
         }
 
